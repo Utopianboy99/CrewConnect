@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Side Project</title>
+    <link rel="stylesheet" href="styles.css">
+
+
+    <!-- These are the google fonts that I used -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:opsz,wght@10..72,100..900&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="description">
+        <p>
+            I'm working on a side project focused on capturing user data and organizing it based on the offices 
+            they belong to. The goal is to deepen my understanding of backend development by designing and 
+            implementing features like user registration, data storage, and relationships between users and office locations.
+        </p>
+    </div>
+    <br>
+    <form action="" method="get" id="userForm">
+        <label for="name"> Name
+        </label><br>
+        <input id="name" type="text" class="input" placeholder="Igama">
+        <br>
+        <label for="username" method="get" > Username
+        </label><br>
+        <input id="username" type="text" class="input" placeholder="Username">
+        <br>
+        <label for="dob" >DOB</label>
+        <br>
+        <input type="date" id="dob" class="input" >
+        <br>
+        <label for="Office">Office</label>
+        <br>
+        <select name="" id="Office" class="input">
+            <option value="NA"></option>
+            <option value="appWorldGraphic">App World - Graphics</option>
+            <option value="appWorldIT">App World - IT</option>
+            <option value="vision">Vision</option>
+            <option value="finance">Finance</option>
+            <option value="media">Media</option>
+        </select>
+        <br>
+        <label for="password"> Password
+        </label>
+        <br>
+        <input id="password" class="input" type="password" placeholder="Password">
+        <br>
+        <input type="submit" id="button">
+        <p>Already have an account ? <a href="login.html">Log In</a></p>
+    </form>
+    
+    <script src="index.js"></script>
+</body>
+
+</html>
