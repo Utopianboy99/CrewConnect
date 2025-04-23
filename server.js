@@ -9,9 +9,7 @@ const port = process.env.PORT || 3000;
 
 
 // Middleware
-app.use(cors({
-    origin: 'https://florentine-subsequent-passionfruit.glitch.me' // allow requests from your frontend
-}));
+app.use(cors());
 app.use(express.json()); // to parse JSON body
 
 // MongoDB setup
