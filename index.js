@@ -12,7 +12,7 @@ document.getElementById('userForm').addEventListener('submit', async function (e
     const user = { name, username, dob, officeId, password };
   
     try {
-      const response = await fetch('http://localhost:3000/users', {
+      const response = await fetch('https://near-sideways-driver.glitch.me/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ document.getElementById('userForm').addEventListener('submit', async function (e
       if (!response.ok) throw new Error(`Server error: ${response.status}`);
   
       const data = await response.json();
-      alert('User submitted successfully!');
+      alert(`✅ Welcome, ${data.name}! You’ve been registered.`);
       console.log('Submitted user:', data);
   
       // Reset the form after successful submission

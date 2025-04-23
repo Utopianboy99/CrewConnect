@@ -6,7 +6,7 @@ if (currentUser) {
 }
 
 // Fetch office tabs
-fetch('http://localhost:3000/offices')
+fetch('https://near-sideways-driver.glitch.me/offices')
   .then(res => res.json())
   .then(offices => {
     const tabs = document.getElementById('tabs');
@@ -21,7 +21,7 @@ fetch('http://localhost:3000/offices')
 
 // Load users in selected office
 function loadUsers(officeId) {
-  fetch(`http://localhost:3000/offices/${officeId}/users`)
+  fetch(`https://near-sideways-driver.glitch.me/offices/${officeId}/users`)
     .then(res => res.json())
     .then(users => {
       const userList = document.getElementById('userList');
