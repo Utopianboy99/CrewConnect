@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -41,12 +42,14 @@ app.post('/users', async (req, res) => {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
+        const hashedPassword = await bcrypt.hash(password, 10); // ✅ Hash password
+
         const newUser = {
             name,
             username,
             dob,
             officeId,
-            password
+            password: hashedPassword // ✅ Store hashed version
         };
 
         const result = await db.collection('users').insertOne(newUser);
@@ -55,10 +58,8 @@ app.post('/users', async (req, res) => {
         console.error('Error saving user:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-    const bcrypt = require('bcrypt');
-    const hashedPassword = await bcrypt.hash(password, 10);
-
 });
+
 
 app.get('/offices/:officeId/users', async (req, res) => {
     try {
