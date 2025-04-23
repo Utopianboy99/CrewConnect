@@ -1,18 +1,20 @@
+require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+
 
 // Middleware
 app.use(cors({
-    origin: 'http://127.0.0.1:5500' // allow requests from your frontend
+    origin: 'https://near-sideways-driver.glitch.me' // allow requests from your frontend
 }));
 app.use(express.json()); // to parse JSON body
 
 // MongoDB setup
-const url = "mongodb+srv://Nhlakanipho:sideproject1@cluster0.q8rcsso.mongodb.net/";
+const url = process.env.DB_URI;
 const client = new MongoClient(url);
 let db;
 
@@ -48,11 +50,14 @@ app.post('/users', async (req, res) => {
         };
 
         const result = await db.collection('users').insertOne(newUser);
-        res.status(201).json(result.ops?.[0] || newUser);
+        res.status(201).json({ ...newUser, _id: result.insertedId });
     } catch (error) {
         console.error('Error saving user:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
+    const bcrypt = require('bcrypt');
+    const hashedPassword = await bcrypt.hash(password, 10);
+
 });
 
 app.get('/offices/:officeId/users', async (req, res) => {
@@ -81,17 +86,22 @@ app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        const user = await db.collection('users').findOne({ username, password });
-
+        const user = await db.collection('users').findOne({ username });
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        res.json(user);
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        res.json(user); // you might want to exclude password here for security
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 
