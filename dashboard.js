@@ -6,7 +6,7 @@ if (currentUser) {
 }
 
 // Fetch office tabs
-fetch('https://near-sideways-driver.glitch.me/offices')
+fetch('https://florentine-subsequent-passionfruit.glitch.me/offices')
   .then(res => res.json())
   .then(offices => {
     const tabs = document.getElementById('tabs');
@@ -21,7 +21,7 @@ fetch('https://near-sideways-driver.glitch.me/offices')
 
 // Load users in selected office
 function loadUsers(officeId) {
-  fetch(`https://near-sideways-driver.glitch.me/offices/${officeId}/users`)
+  fetch(`https://florentine-subsequent-passionfruit.glitch.me/offices/${officeId}/users`)
     .then(res => res.json())
     .then(users => {
       const userList = document.getElementById('userList');

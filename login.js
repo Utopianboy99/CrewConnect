@@ -5,7 +5,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('https://near-sideways-driver.glitch.me/login', {
+        const response = await fetch('https://florentine-subsequent-passionfruit.glitch.me/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

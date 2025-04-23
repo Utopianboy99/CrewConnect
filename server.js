@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors({
-    origin: 'https://near-sideways-driver.glitch.me' // allow requests from your frontend
+    origin: 'https://florentine-subsequent-passionfruit.glitch.me' // allow requests from your frontend
 }));
 app.use(express.json()); // to parse JSON body
 
