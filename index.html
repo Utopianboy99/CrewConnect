@@ -1,64 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentication Side Project</title>
-    <link rel="stylesheet" href="styles.css">
-
-
-    <!-- These are the google fonts that I used -->
-
+    <title>CrewConnect</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:opsz,wght@10..72,100..900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
 
+        :root {
+            --glass-bg: rgba(255,255,255,0.08);
+            --glass-border: rgba(255,255,255,0.15);
+            --text-primary: rgba(255,255,255,0.95);
+            --text-secondary: rgba(255,255,255,0.55);
+            --accent: #0A84FF;
+            --accent-hover: #409CFF;
+            --input-bg: rgba(255,255,255,0.07);
+            --input-border: rgba(255,255,255,0.12);
+            --input-focus: rgba(10,132,255,0.5);
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Video Background */
+        .video-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .video-bg video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg,rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.40) 50%,rgba(0,0,0,0.62) 100%);
+        }
+
+        /* Layout */
+        .page {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 480px 1fr;
+            grid-template-rows: auto 1fr auto;
+            grid-template-areas: "nav nav nav" ". main ." "footer footer footer";
+            padding: 0 40px;
+        }
+
+        /* Nav */
+        nav {
+            grid-area: nav;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 40px;
+        }
+
+        .nav-logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .nav-logo span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text-primary); }
+
+        /* Main Card */
+        main {
+            grid-area: main;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-bottom: 40px;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 44px 40px;
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: 0 32px 64px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(255,255,255,0.05) inset, 0 1px 0 rgba(255,255,255,0.1) inset;
+            animation: cardReveal 0.6s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        @keyframes cardReveal {
+            from { opacity:0; transform:translateY(24px) scale(0.98); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+
+        .card-eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+            animation: fadeUp 0.6s 0.1s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            animation: fadeUp 0.6s 0.12s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-top: 10px;
+            margin-bottom: 32px;
+            animation: fadeUp 0.6s 0.15s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(12px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+
+        form { display:flex; flex-direction:column; gap:16px; }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        .field:nth-child(1){animation-delay:0.18s}
+        .field:nth-child(2){animation-delay:0.22s}
+        .field:nth-child(3){animation-delay:0.26s}
+        .field:nth-child(4){animation-delay:0.30s}
+        .field:nth-child(5){animation-delay:0.34s}
+
+        label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.2px;
+        }
+
+        .input-wrap { position: relative; }
+
+        .input-wrap svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.4;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .input {
+            width: 100%;
+            height: 44px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: inherit;
+            padding: 0 14px 0 40px;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        select.input { cursor: pointer; }
+        select.input option { background: #1c1c1e; color: white; }
+        .input::placeholder { color: rgba(255,255,255,0.2); }
+
+        .input:focus {
+            border-color: var(--accent);
+            background: rgba(10,132,255,0.06);
+            box-shadow: 0 0 0 3px var(--input-focus);
+        }
+
+        .input-wrap:focus-within svg { opacity: 0.75; }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) opacity(0.4);
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            margin-top: 4px;
+            height: 48px;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(10,132,255,0.35);
+            animation: fadeUp 0.5s 0.38s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 6px 28px rgba(10,132,255,0.5);
+        }
+
+        .submit-btn:active { transform: scale(0.98); }
+
+        .login-link {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 20px;
+            animation: fadeUp 0.5s 0.42s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        .login-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .login-link a:hover { color: var(--accent-hover); }
+
+        footer {
+            grid-area: footer;
+            padding: 20px 0 24px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        footer a {
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover { color: rgba(255,255,255,0.6); }
+
+        @media (max-width:600px) {
+            .page { grid-template-columns:1fr; grid-template-areas:"nav" "main" "footer"; padding:0 20px; }
+            .card { padding:32px 24px; }
+            .nav-links { display:none; }
+        }
+    </style>
 </head>
-
 <body>
-    <div class="description">
-        <p>
-            I'm working on a side project focused on capturing user data and organizing it based on the offices 
-            they belong to. The goal is to deepen my understanding of backend development by designing and 
-            implementing features like user registration, data storage, and relationships between users and office locations.
-        </p>
+
+    <div class="video-bg">
+        <video autoplay muted loop playsinline>
+            <source src="./img/From_Main_Klickpin_CF-_Video_Pinterest_-_3BVmwh0qY.mp4" type="video/mp4">
+        </video>
     </div>
-    <br>
-    <form action="" method="get" id="userForm">
-        <label for="name"> Name
-        </label><br>
-        <input id="name" type="text" class="input" placeholder="Igama">
-        <br>
-        <label for="username" method="get" > Username
-        </label><br>
-        <input id="username" type="text" class="input" placeholder="Username">
-        <br>
-        <label for="dob" >DOB</label>
-        <br>
-        <input type="date" id="dob" class="input" >
-        <br>
-        <label for="Office">Office</label>
-        <br>
-        <select name="" id="Office" class="input">
-            <option value="NA"></option>
-            <option value="appWorldGraphic">App World - Graphics</option>
-            <option value="appWorldIT">App World - IT</option>
-            <option value="vision">Vision</option>
-            <option value="finance">Finance</option>
-            <option value="media">Media</option>
-        </select>
-        <br>
-        <label for="password"> Password
-        </label>
-        <br>
-        <input id="password" class="input" type="password" placeholder="Password">
-        <br>
-        <input type="submit" id="button">
-        <p>Already have an account ? <a href="login.html">Log In</a></p>
-    </form>
-    
+
+    <div class="page">
+
+        <nav>
+            <div class="nav-logo">Crew<span>Connect</span></div>
+            <ul class="nav-links">
+                <!-- <li><a href="#">About</a></li> -->
+                <!-- <li><a href="#">Features</a></li> -->
+                <li><a href="login.html">Sign In</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <div class="card">
+                <p class="card-eyebrow">Get Started</p>
+                <h1 class="card-title">Create your account</h1>
+                <p class="card-subtitle">Join your office network and connect with your team.</p>
+
+                <form action="" method="get" id="userForm">
+
+                    <div class="field">
+                        <label for="name">Full Name</label>
+                        <div class="input-wrap">
+                            <input id="name" type="text" class="input" placeholder="Your name">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="username">Username</label>
+                        <div class="input-wrap">
+                            <input id="username" type="text" class="input" placeholder="@username">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="dob">Date of Birth</label>
+                        <div class="input-wrap">
+                            <input type="date" id="dob" class="input">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="Office">Office</label>
+                        <div class="input-wrap">
+                            <select id="Office" class="input">
+                                <option value="" disabled selected>Select your office</option>
+                                <option value="appWorldGraphic">App World — Graphics</option>
+                                <option value="appWorldIT">App World — IT</option>
+                                <option value="vision">Vision</option>
+                                <option value="finance">Finance</option>
+                                <option value="media">Media</option>
+                            </select>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <div class="input-wrap">
+                            <input id="password" class="input" type="password" placeholder="Create a password">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Create Account</button>
+
+                </form>
+
+                <p class="login-link">Already have an account? <a href="login.html">Sign in</a></p>
+            </div>
+        </main>
+
+        <footer>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Support</a>
+        </footer>
+
+    </div>
+
     <script src="index.js"></script>
 </body>
-
 </html>

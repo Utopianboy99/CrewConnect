@@ -1,27 +1,139 @@
-* {
-    margin: px;
-    padding: 0px;
+/* ── Reset ── */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
+/* ── Design Tokens ── */
+:root {
+    --primary: #1a1a2e;
+    --secondary: #16213e;
+    --accent-dark: #0f3460;
+    --highlight: #e94560;
+    --text: #f1f1f1;
+
+    /* Apple-style additions */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --text-primary: rgba(255, 255, 255, 0.95);
+    --text-secondary: rgba(255, 255, 255, 0.55);
+    --accent: #0A84FF;
+    --accent-hover: #409CFF;
+    --input-bg: rgba(255, 255, 255, 0.07);
+    --input-border: rgba(255, 255, 255, 0.12);
+    --input-focus: rgba(10, 132, 255, 0.5);
+}
+
+/* ── Body ── */
 body {
-    /* font-family: "Big Shoulders Stencil", sans-serif; */
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* border:2px solid lime; */
     justify-content: center;
-    /* background-color: darkslategray; */
-    color: white;
-    background-image: url(img/Futuristic\ Metallic\ Design.jpeg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--primary);
+    /* background-image: url(img/Futuristic\ Metallic\ Design.jpeg); */
     background-size: cover;
     background-repeat: no-repeat;
 }
 
-/* Description of the project */
+/* ── Video Background ── */
+.video-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
 
+.video-bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.video-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.65) 0%,
+        rgba(0, 0, 0, 0.40) 50%,
+        rgba(0, 0, 0, 0.62) 100%
+    ); */
+}
+
+/* ── Page Layout ── */
+.page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 480px 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "nav nav nav"
+        ". main ."
+        "footer footer footer";
+    padding: 0 40px;
+}
+
+/* ── Nav ── */
+nav {
+    grid-area: nav;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 40px;
+}
+
+.nav-logo {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+}
+
+.nav-logo span {
+    color: var(--accent);
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+}
+
+.nav-links a {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--text-primary);
+}
+
+/* ── Main ── */
+main {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 40px;
+}
+
+/* ── Description ── */
 .description {
-    /* border:2px solid lime; */
     width: 60%;
     display: flex;
     align-items: center;
@@ -30,68 +142,235 @@ body {
 
 .description p {
     width: 80%;
-    height: 100px;
-    /* border: 2px solid red; */
     text-align: center;
-    font-size: 20px;
-    font-family: "Big Shoulders Stencil", sans-serif;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
 }
 
-/* form of the project */
-
-form {
-    width: 30%;
-    height: 450px;
-    /* border: 2px solid red; */
+/* ── Card (frosted glass) ── */
+.card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: 20px;
-    padding: 5px;
-    text-align: center;
-    /* filter: opacity(90px); */
+    padding: 44px 40px;
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    box-shadow:
+        0 32px 64px rgba(0, 0, 0, 0.4),
+        0 0 0 0.5px rgba(255, 255, 255, 0.05) inset,
+        0 1px 0 rgba(255, 255, 255, 0.10) inset;
+    animation: cardReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cardReveal {
+    from { opacity: 0; transform: translateY(24px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Card Header ── */
+.card-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    animation: fadeUp 0.6s 0.10s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.card-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    animation: fadeUp 0.6s 0.12s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.card-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-top: 10px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Form ── */
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-radius: 20px;
     backdrop-filter: blur(5px);
-    /* the frosted glass blur */
 }
 
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    text-align: left;
+}
+
+.field:nth-child(1) { animation-delay: 0.18s; }
+.field:nth-child(2) { animation-delay: 0.22s; }
+.field:nth-child(3) { animation-delay: 0.26s; }
+.field:nth-child(4) { animation-delay: 0.30s; }
+.field:nth-child(5) { animation-delay: 0.34s; }
+
+label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.2px;
+}
+
+/* ── Input Wrapper (icon + field) ── */
+.input-wrap {
+    position: relative;
+}
+
+.input-wrap svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.4;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.input-wrap:focus-within svg {
+    opacity: 0.75;
+}
+
+/* ── Inputs ── */
 .input {
-    border: 1px solid black;
-    width: 90%;
-    height: 30px;
-    border-radius: 2px;
-    margin: 10px 0px 20px;
+    width: 100%;
+    height: 44px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-family: inherit;
+    padding: 0 14px 0 40px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
 }
 
-input::placeholder {
-    padding-left: 5px;
-    color: purple;
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+    padding-left: 0;
 }
 
-#button {
-    padding: 5px 15px;
-    background-color: blueviolet;
-    border: none;
-    border-radius: 5px;
+.input:focus {
+    border-color: var(--accent);
+    background: rgba(10, 132, 255, 0.06);
+    box-shadow: 0 0 0 3px var(--input-focus);
+}
+
+select.input {
+    cursor: pointer;
+}
+
+select.input option {
+    background: #1c1c1e;
     color: white;
 }
 
-/* Dashboard Begining */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) opacity(0.4);
+    cursor: pointer;
+}
 
-:root {
-    --primary: #1a1a2e;
-    --secondary: #16213e;
-    --accent: #0f3460;
-    --highlight: #e94560;
-    --text: #f1f1f1;
-  }
-  
-  body {
-    font-family: 'Big Shoulders Stencil', sans-serif;
-    background-color: var(--primary);
-    color: var(--text);
-    margin: 0;
-    padding: 20px;
-    min-height: 100vh;
-  }
-  
-  h1 {
+/* ── Submit / Buttons ── */
+.submit-btn,
+#button,
+#login-button {
+    height: 48px;
+    padding: 0 20px;
+    background: var(--accent);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(10, 132, 255, 0.35);
+    animation: fadeUp 0.5s 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+    margin-top: 4px;
+}
+
+.submit-btn:hover,
+#button:hover,
+#login-button:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 6px 28px rgba(10, 132, 255, 0.5);
+}
+
+.submit-btn:active,
+#button:active,
+#login-button:active {
+    transform: scale(0.98);
+}
+
+/* ── Login link ── */
+.login-link {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 20px;
+    animation: fadeUp 0.5s 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.login-link a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.login-link a:hover {
+    color: var(--accent-hover);
+}
+
+/* ── Page Footer ── */
+footer {
+    grid-area: footer;
+    padding: 20px 0 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+}
+
+footer a {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+footer a:hover {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Dashboard ── */
+h1 {
     text-align: center;
     font-size: 3rem;
     margin-bottom: 30px;
@@ -99,9 +378,9 @@ input::placeholder {
     text-transform: uppercase;
     color: var(--highlight);
     text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
-  }
-  
-  #welcome {
+}
+
+#welcome {
     background: var(--secondary);
     padding: 20px;
     border-radius: 8px;
@@ -110,75 +389,81 @@ input::placeholder {
     text-align: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     border-left: 5px solid var(--highlight);
-  }
-  
-  #tabs {
+}
+
+#tabs {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 30px;
     justify-content: center;
-    
-  }
-  
-  .tab {
+}
+
+.tab {
     padding: 10px 15px;
     border: none;
-    /* background-color: rgb(255, 255, 255, 10%); */
     backdrop-filter: blur(10px);
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-  }
-  
-  .tab-button{
-    padding: 10px 15px;
-    background-color:#16213e;
-    border:none;
-    color:white;
-    border-radius:5px;
-  }
+    color: var(--text-primary);
+}
 
-  .tab:hover {
+.tab-button {
+    padding: 10px 15px;
+    background-color: #16213e;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tab:hover {
     background: white;
+    color: #000;
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(241, 237, 237, 0.4);
-  }
-  
-  #userList {
+}
+
+#userList {
     background: var(--secondary);
     padding: 25px;
     border-radius: 8px;
     max-width: 600px;
     margin: 0 auto;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  }
-  
-  .user-info {
+}
+
+.user-info {
     margin-bottom: 15px;
     font-size: 1.2rem;
-  }
-  
-  .user-info span {
+}
+
+.user-info span {
     color: var(--highlight);
-  }
-  
-  @media (max-width: 600px) {
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    .page {
+        grid-template-columns: 1fr;
+        grid-template-areas: "nav" "main" "footer";
+        padding: 0 20px;
+    }
+
+    .card {
+        padding: 32px 24px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
     h1 {
-      font-size: 2rem;
+        font-size: 2rem;
     }
-    
+
     #welcome {
-      font-size: 1.2rem;
+        font-size: 1.2rem;
     }
-  }
-
-/* login section */
-
-#login-button{
-    padding: 5px 15px;
-    background-color: blueviolet;
-    border: none;
-    border-radius: 5px;
-    color: white;
 }
